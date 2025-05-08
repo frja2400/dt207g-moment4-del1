@@ -1,5 +1,18 @@
 const express = require('express');
 const router = express.Router();
+const mongoose = require('mongoose');
+require('dotenv').config();
+
+//Anslut till MongoDB
+mongoose.set("strictQuery", false);
+mongoose.connect(process.env.DATABASE).then(() => {
+    console.log("Connected to MongoDB");
+}).catch((error) => {
+    console.log("Error connecting to database");
+});
+
+//User model (importera schema för min tabell)
+const user = require("../models/user");
 
 router.post("/register", async (req, res) => {
 
