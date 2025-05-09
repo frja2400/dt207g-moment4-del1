@@ -11,8 +11,8 @@ mongoose.connect(process.env.DATABASE).then(() => {
     console.log("Error connecting to database");
 });
 
-//User model (importera schema för min tabell)
-const user = require("../models/user");
+//User modell (importera schema för min tabell)
+const User = require("../models/user");
 
 router.post("/register", async (req, res) => {
 
@@ -49,6 +49,10 @@ router.post("/register", async (req, res) => {
         }
 
         //Annars har användare skapats utan problem
+        //Använder modellen User för att skapa ny användare
+        const user = new User ({ username, password });
+        await user.save();
+
         return res.status(201).json({
             message: "User created!",
             http_response: 201
