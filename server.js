@@ -2,6 +2,7 @@ const express = require('express');
 const bodyParser = require('body-parser');              //Använder body-parser för att kunna läsa JSON i req.body
 const authRoutes = require('./routes/auth-routes');     //Importerar routes från separat fil
 const jwt = require('jsonwebtoken');
+const path = require('path');                           //Path-modul för att referera till min index.html
 require('dotenv').config();
 
 //Skapar express-app
@@ -10,6 +11,12 @@ const port = process.env.PORT || 3000;
 app.use(bodyParser.json());
 
 //Routes
+
+//För att visa en enkel HTML-sida som förklarar applikationen.
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, 'index.html'));
+  });
+
 //Kopplar min auth-route till rotsökväg /api.
 app.use("/api", authRoutes);
 
