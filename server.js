@@ -3,6 +3,7 @@ const bodyParser = require('body-parser');              //Använder body-parser 
 const authRoutes = require('./routes/auth-routes');     //Importerar routes från separat fil
 const jwt = require('jsonwebtoken');
 const path = require('path');                           //Path-modul för att referera till min index.html
+const User = require("./models/user");                 //Importera User-modell
 require('dotenv').config();
 
 //Skapar express-app
@@ -21,8 +22,16 @@ app.get('/', (req, res) => {
 app.use("/api", authRoutes);
 
 //Skyddad route
-app.get("/api/protected", authenticateToken, (req, res) => {
-    res.json({ message: "Protected route!" });
+app.get("/api/protected", authenticateToken, async (req, res) => {
+    try {
+        //Hämta alla användarnamn från min databas
+        const users = await User.find({}, 'username')
+
+        //Skicka tillbaka listan av användare som JSON
+        res.json(users);
+    } catch (error) {
+        return res.status(500).json({ message: 'Server error' });
+    }
 });
 
 //Middleware som kollar token och skickar vidare till skyddad route.
