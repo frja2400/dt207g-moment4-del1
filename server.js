@@ -5,11 +5,14 @@ const jwt = require('jsonwebtoken');
 const path = require('path');                           //Path-modul för att referera till min index.html
 const User = require("./models/user");                 //Importera User-modell
 require('dotenv').config();
+const cors = require('cors');                           //Importerar cors för att tillåta CORS-förfrågningar från min frontend.
 
 //Skapar express-app
 const app = express();
 const port = process.env.PORT || 3000;
 app.use(bodyParser.json());
+
+app.use(cors());
 
 //Routes
 
